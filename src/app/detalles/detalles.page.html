@@ -2,7 +2,6 @@
   <ion-toolbar>
     <ion-title>Detalles del Cliente</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="cerrarModal()">Cerrar</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -37,4 +36,67 @@
     </ion-card-content>
   </ion-card>
 
+
+
+    <ion-header>
+  <ion-toolbar>
+    <ion-title>{{ cliente.nombre }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="nav-tab" [class.active]="activeTab==='personal'" (click)="showTab('personal')">Personal</button>
+    <button class="nav-tab" [class.active]="activeTab==='medical'" (click)="showTab('medical')">Médica</button>
+    <button class="nav-tab" [class.active]="activeTab==='measurements'" (click)="showTab('measurements')">Medidas</button>
+    <button class="nav-tab" [class.active]="activeTab==='photos'" (click)="showTab('photos')">Fotos</button>
+  </div>
+
+  <!-- Tabs Content -->
+  <div class="content">
+    <!-- Personal Tab -->
+    <div *ngIf="activeTab==='personal'" class="tab-content">
+      <div class="info-card">
+        <h3>Información Personal</h3>
+        <p>Nombre: {{ cliente.nombre }}</p>
+        <p>Edad: {{ cliente.edad }} años</p>
+        <p>Email: {{ cliente.email }}</p>
+        <p>Fecha de Ingreso: {{ cliente.fechaIngreso }}</p>
+      </div>
+    </div>
+
+    <!-- Medical Tab -->
+    <div *ngIf="activeTab==='medical'" class="tab-content">
+      <div class="info-card">
+        <h3>Información Médica</h3>
+        <p>IMC: {{ cliente.imc }}</p>
+        <p>Condiciones: {{ cliente.condiciones }}</p>
+      </div>
+    </div>
+
+    <!-- Measurements Tab -->
+    <div *ngIf="activeTab==='measurements'" class="tab-content">
+      <div class="info-card">
+        <h3>Medidas</h3>
+        <p>Peso: {{ cliente.peso }} kg</p>
+        <p>Altura: {{ cliente.altura }} cm</p>
+      </div>
+    </div>
+
+    <!-- Photos Tab -->
+    <div *ngIf="activeTab==='photos'" class="tab-content">
+      <div class="info-card">
+        <h3>Fotos</h3>
+        <p>Aquí se podrían mostrar fotos reales del cliente</p>
+      </div>
+    </div>
+  </div>
 </ion-content>
+
+</ion-content>
+
+

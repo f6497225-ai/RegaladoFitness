@@ -10,10 +10,15 @@ import { ModalController } from '@ionic/angular';
 export class DetallesPage  {
   @Input() cliente: any; // Recibimos el cliente desde la página padre
 
+  activeTab: string = 'personal';
+
   constructor(private modalCtrl: ModalController) {}
 
-  cerrarModal() {
+  closeModal() {
     this.modalCtrl.dismiss();
   }
 
+  showTab(tab: string) {
+    this.activeTab = tab;
+  }
 }

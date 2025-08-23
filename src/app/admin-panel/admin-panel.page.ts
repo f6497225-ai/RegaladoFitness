@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DetallesPage } from '../detalles/detalles.page';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -57,38 +58,13 @@ clientes = [
 ];
 clientesFiltrados = [...this.clientes];
 
-  constructor(private modalCtrl: ModalController) {}
+constructor(private router: Router) {}
 
-  // Modal detalles
-  async verDetalles(cliente: any) {
-    const modal = await this.modalCtrl.create({
-      component: DetallesPage,
-      componentProps: { cliente }
-    });
-    await modal.present();
-  }
+verDetalles(cliente: any) {
+  // Enviamos el cliente a la página de detalles usando el state
+  this.router.navigate(['/detalles'], { state: { cliente: cliente } });
+}
 
-  // Aprobar cliente
-  aprobarCliente(index: number) {
-    this.clientes[index].estado = "aprobado";
-  }
-
-  // Rechazar cliente
-  rechazarCliente(index: number) {
-    this.clientes[index].estado = "rechazado";
-  }
-
-  // Devuelve color según estado
-  getColorEstado(estado: string) {
-    switch(estado) {
-      case 'pendiente': return 'warning';
-      case 'aprobado': return 'success';
-      case 'rechazado': return 'danger';
-      default: return 'medium';
-    }
-  }
-
-  // Iniciales para avatar
   getIniciales(nombre: string) {
     return nombre.split(' ').map(n => n[0]).join('').toUpperCase();
   }
