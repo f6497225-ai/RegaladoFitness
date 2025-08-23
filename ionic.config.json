@@ -1,0 +1,7 @@
+{
+  "name": "GymTR",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

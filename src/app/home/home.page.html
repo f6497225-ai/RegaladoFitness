@@ -1,0 +1,153 @@
+<ion-header>
+<nav class="navbar">
+    <div class="nav-container">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="assets/IMG/logoL.png" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c60506;" />
+        Regalado Fitness
+      </div>
+
+      <!-- Botón hamburguesa (solo en móvil) -->
+      <div class="menu-toggle" (click)="toggleMenu()">
+        ☰
+      </div>
+
+      <!-- Links -->
+      <ul class="nav-links" [class.active]="menuOpen">
+        <li><a (click)="scrollTo('inicio')">Inicio</a></li>
+        <li><a (click)="scrollTo('servicios')">Servicios</a></li>
+        <li><a (click)="scrollTo('contactos')">Contactos</a></li>
+      </ul>
+    </div>
+  </nav>
+</ion-header>
+
+<ion-content>
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>REGALADO FITNESS</h1>
+            <p class="hero-slogan">Tu Mejor Versión Te Espera</p>
+            <img src="assets/IMG/logo.jpg" alt="Logo" style="width: 250px; height: 250px; border-radius: 50%;" />
+            <br>
+            <br>
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9;">
+                Transforma tu cuerpo, transforma tu vida
+            </p>
+            <a (click)="scrollTo('servicios')" class="cta-button">Ver Servicios</a>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios" class="services">
+        <div class="container">
+            <br>
+            <h2>Servicios Incluidos</h2>
+            <div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">🏋️‍♂️</div>
+                    <li>Evaluación</li>
+                    <li>Acondicionamiento físico</li>
+                    <li>Menú nutricional personalizado</li>
+                    <li>Entrenamiento en gym o a domicilio</li>
+                    <li>Protocolo de suplementacion</li>
+                    
+                    </div>
+
+                </div>
+            </div>
+            
+        </div>
+        <br>
+        <a href="/solicitud" class="cta-button2">Solicitud</a>
+    </section>
+
+    <!-- Contactos -->
+    <section id="contactos" class="contact">
+        <div class="container">
+            <br>
+            <h2 style="color: white;">Contactanos</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <h3>Ubicación</h3>
+                    <p>Av. Principal 123<br>Centro de la Ciudad<br>Cotui, Sánchez Ramírez</p>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <h3>Teléfonos</h3>
+                    <p>+1 (809) 123-4567<br>+1 (809) 987-6543<br>WhatsApp disponible</p>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email</h3>
+                    <p>info@powerfitgym.com<br>ventas@powerfitgym.com<br>soporte@powerfitgym.com</p>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">🕒</div>
+                    <h3>Horarios</h3>
+                    <p>Lun - Vie: 5:00 AM - 10:00 PM<br>Sábados: 6:00 AM - 8:00 PM<br>Domingos: 7:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Regalado Fitness. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Efecto navbar al hacer scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                navbar.style.background = 'rgba(0, 0, 0, 0.9)';
+            }
+        });
+
+        // Animación de aparición de elementos
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observar elementos para animaciones
+        document.querySelectorAll('.service-card, .contact-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Smooth scroll para los enlaces de navegación
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</ion-content>

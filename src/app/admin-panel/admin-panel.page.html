@@ -1,0 +1,98 @@
+<ion-content> 
+  <!-- HEADER -->
+  <header class="admin-header">
+    <div class="header-content">
+      <div class="admin-logo">
+        <img src="assets/IMG/logoL.png" alt="Logo">
+        <div>
+          <div class="admin-title">🏋️ Regalado Fitness Admin</div>
+        </div>
+      </div>
+      <div class="admin-info">
+        <h3>👨‍💼 Admin: Juan Regalado</h3>
+        <p>📅 Última conexión: Hoy, 10:30 AM</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="admin-container">
+    <!-- ESTADÍSTICAS -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📝</div>
+        <div class="stat-number">24</div>
+        <div class="stat-label">Solicitudes Nuevas
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number">188</div>
+        <div class="stat-label">Total de Solicitudes</div>
+      </div>
+    </section>
+
+    <!-- FILTROS -->
+<section class="filters-section">
+  <div class="filters-title">🔍 Filtros de Búsqueda</div>
+  <div class="filters-grid">
+    <div class="filter-group">
+      <label>Buscar por nombre</label>
+      <input type="text" [(ngModel)]="filtros.nombre" (input)="aplicarFiltros()" placeholder="Nombre del cliente...">
+    </div>
+  </div>
+  <div class="filters-actions">
+    <button class="btn btn-secondary" (click)="limpiarFiltros()">🗑️ Limpiar</button>
+  </div>
+</section>
+
+<!-- TABLA DE CLIENTES -->
+<section class="solicitudes-section">
+  <div class="section-header">
+    <div class="section-title">📋 Clientes Registrados</div>
+  </div>
+
+  <div class="table-container">
+    <table class="clientes-table">
+      <thead>
+        <tr>
+          <th>Miembro</th>
+          <th>Edad</th>
+          <th>IMC</th>
+          <th>Peso</th>
+          <th>Altura</th>
+          <th>Condiciones</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientesFiltrados; let i = index">
+          <td>
+            <div class="member-info">
+              <div class="member-avatar">
+                {{ getIniciales(cliente.nombre) }}
+              </div>
+              <div class="member-details">
+                <h4>{{ cliente.nombre }}</h4>
+                <p>{{ cliente.email }}</p>
+              </div>
+            </div>
+          </td>
+          <td>{{ cliente.edad }} años</td>
+          <td>{{ cliente.imc }}</td>
+          <td>{{ cliente.peso }}</td>
+          <td>{{ cliente.altura }}</td>
+          <td>{{ cliente.condiciones }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-action btn-view" (click)="verDetalles(cliente)">👁️</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+  </main>
+</ion-content> 
+

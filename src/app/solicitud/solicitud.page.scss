@@ -1,0 +1,298 @@
+/* ===== NAVBAR ===== */
+.navbar {
+  background: linear-gradient(135deg, #c60506 0%, #8b0000 100%);
+  padding: 0;
+  box-shadow: 0 4px 20px rgba(198,5,6,0.3);
+  position: relative;
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.logo img {
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.nav-links li a:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.menu-toggle {
+   display: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.menu-toggle:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* ======== ESTILOS BASE PARA MÓVILES ======== */
+body {
+  background: #fff;
+  color: #000;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* 🔹 Contenedor principal */
+.form-container {
+  width: 95%;
+  margin: 15px auto;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+  border-radius: 10px;
+  box-shadow: none; /* más limpio en móvil */
+}
+
+/* 🔹 Títulos */
+h2, h3 {
+  text-align: center;
+  color: #000;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+/* 🔹 Secciones (steps) */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 🔹 Grupos de formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #000;
+  font-size: 15px;
+}
+
+/* 🔹 Inputs, Textarea y Select */
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  width: 100%;
+  transition: border 0.3s ease;
+  background: #fff;
+  color: #000;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #c60506;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* 🔹 Select con flecha bonita */
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%207%205-7z%22%20fill%3D%22%23333%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+/* 🔹 Botones */
+button {
+  width: 100%;
+  background: #c60506;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #a30404;
+}
+
+button + button {
+  margin-top: 10px;
+}
+
+/* 🔹 Grid de fotos en móvil */
+.photos-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.photo-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+.photo-upload label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Cuadro de cámara */
+.camera-box {
+  border: 2px dashed #bbb;
+  border-radius: 12px;
+  padding: 25px;
+  cursor: pointer;
+  transition: border 0.3s ease, background 0.3s ease;
+}
+
+.camera-box:hover {
+  border-color: #c60506;
+  background: #fafafa;
+}
+
+.camera-icon {
+  font-size: 30px;
+}
+
+.photo-preview img {
+  max-width: 100%;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .nav-links {
+    position: fixed;
+    top: 80px; /* debajo del navbar */
+    right: -250px; /* inicialmente fuera de pantalla */
+    width: auto; /* se ajusta al contenido */
+    min-width: 200px; /* opcional: ancho mínimo */
+    max-width: 300px; /* opcional: ancho máximo */
+    background: rgba(198, 5, 6, 0.95); /* fondo semitransparente */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: -4px 8px 20px rgba(0,0,0,0.3);
+    border-radius: 10px 0 0 10px; /* bordes redondeados a la izquierda */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 10px 20px;
+    transition: right 0.3s ease, opacity 0.3s ease;
+    z-index: 999;
+  }
+
+  .nav-links.active { right: 0;; opacity: 1;}
+  .nav-links li {
+    width: 100%; /* cada link ocupa todo el ancho del panel */
+    margin: 5px 0;
+  }
+
+  .nav-links li a {
+    width: 100%;
+    padding: 10px 15px;
+    display: block;
+  }
+  .menu-toggle { display: block; }
+  .form-row, .radio-group { grid-template-columns: 1fr; gap: 15px; }
+  button { width: 100%; margin: 5px 0; }
+}
+
+@media (max-width: 480px) {
+  .logo { font-size: 1.2em; }
+  .logo img { width: 40px; height: 40px; }
+  .form-header { padding: 20px; margin-bottom: 25px; }
+  .step { padding: 20px 15px; }
+  .steps-indicator span { width: 35px; height: 35px; font-size: 0.9em; }
+  .photos-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+  .camera-box, .photo-preview { width: 120px; height: 120px; }
+  .camera-icon { font-size: 2.5em; }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ===== ACCESIBILIDAD ===== */
+*:focus { outline: 2px solid #c60506; outline-offset: 2px; }
+
+@media (max-width: 768px) {
+  .hero-logo {
+    max-height: 250px; /* más pequeño en tablet/móvil */
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-logo {
+    max-height: 180px; /* en móvil pequeño */
+  }
+}
+.hero-logo {
+  width: 100%;
+  height: auto; /* mantiene proporción */
+  max-height: 500px; /* opcional: limita altura en desktop */
+  object-fit: cover; /* recorta de manera elegante si el contenedor es más alto */
+  display: block;
+}
+

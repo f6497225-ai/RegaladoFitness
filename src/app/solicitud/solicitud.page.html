@@ -1,0 +1,170 @@
+<ion-header [translucent]="true">
+<nav class="navbar">
+    <div class="nav-container">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="assets/IMG/logoL.png" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #c60506;" />
+        Regalado Fitness
+      </div>
+
+      <!-- Botón hamburguesa (solo en móvil) -->
+      <div class="menu-toggle" (click)="toggleMenu()">
+        ☰
+      </div>
+
+      <!-- Links -->
+      <ul class="nav-links" [class.active]="menuOpen">
+        <li><a href="#inicio">Inicio</a></li>
+      </ul>
+    </div>
+  </nav>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<img src="assets/IMG/Logo2.jpg" alt="Logo" class="hero-logo" />
+     
+<div class="form-container">
+  <!-- Paso 1 -->
+  <div *ngIf="currentStep === 1" class="step">
+    <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Información Personal</h2>
+                    
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo *</label>
+                        <input type="text" id="nombre" name="nombre"  placeholder="Nombre Completo" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="fechaNacimiento">Fecha de Nacimiento *</label>
+                                <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                          <div class="form-group">
+                            <label for="altura">Altura *</label>
+                            <div style="display: flex; gap: 8px;">
+                              <input type="number" id="altura" name="altura" min="4" max="250" placeholder="Ej: 170" required>
+                              <select id="alturaUnidad" name="alturaUnidad">
+                                <option value="cm">cm</option>
+                                <option value="ft">pies</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-col">
+                          <div class="form-group">
+                            <label for="peso">Peso *</label>
+                            <div style="display: flex; gap: 8px;">
+                              <input type="number" id="peso" name="peso" min="30" max="300" step="0.1" placeholder="Ej: 70" required>
+                              <select id="pesoUnidad" name="pesoUnidad">
+                                <option value="kg">kg</option>
+                                <option value="lb">lb</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="enfermedades">¿Tiene alguna enfermedad o condición médica?</label>
+                        <textarea id="enfermedades" name="enfermedades" placeholder="Describa cualquier condición médica relevante (diabetes, hipertensión, lesiones previas, etc.)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="incapacidades">¿Tiene alguna incapacidad para realizar ejercicios?</label>
+                        <textarea id="incapacidades" name="incapacidades" placeholder="Describa cualquier limitación física o restricción médica para ejercitarse"></textarea>
+                    </div>
+
+<div class="form-group">
+  <label for="modalidad">Modalidad de Servicio *</label>
+  <select id="modalidad" name="modalidad" required>
+    <option value="" disabled selected>Seleccione una opción</option>
+    <option value="presencial">Presencial</option>
+    <option value="online">Online</option>
+    <option value="hibrido">Híbrido</option>
+  </select>
+</div>
+
+
+
+    <button (click)="nextStep()">Siguiente</button>
+  </div>
+
+<div *ngIf="currentStep === 2" class="step">
+  <h3>Fotos de Progreso</h3>
+  <div class="photos-grid">
+    <!-- Frente -->
+    <div class="photo-upload">
+      <label>Frente</label>
+      
+      <!-- Cuadrito de cámara -->
+      <div class="camera-box" [class.hidden]="previews['frente']" (click)="triggerFileInput('frente')">
+        <div class="camera-icon">📷</div>
+        <div class="camera-text">Subir foto</div>
+      </div>
+      
+      <!-- Preview de imagen -->
+      <div class="photo-preview" [class.hidden]="!previews['frente']" (click)="triggerFileInput('frente')">
+        <img *ngIf="previews['frente']" [src]="previews['frente']" alt="Foto frente" />
+      </div>
+      
+      <!-- Input file oculto -->
+      <input type="file" #frenteInput (change)="previewImage($event, 'frente')" accept="image/*" style="display: none;" />
+    </div>
+
+    <!-- Espalda -->
+    <div class="photo-upload">
+      <label>Espalda</label>
+      
+      <div class="camera-box" [class.hidden]="previews['espalda']" (click)="triggerFileInput('espalda')">
+        <div class="camera-icon">📷</div>
+        <div class="camera-text">Subir foto</div>
+      </div>
+      
+      <div class="photo-preview" [class.hidden]="!previews['espalda']" (click)="triggerFileInput('espalda')">
+        <img *ngIf="previews['espalda']" [src]="previews['espalda']" alt="Foto espalda" />
+      </div>
+      
+      <input type="file" #espaldaInput (change)="previewImage($event, 'espalda')" accept="image/*" style="display: none;" />
+    </div>
+
+    <!-- Lado Izquierdo -->
+    <div class="photo-upload">
+      <label>Lado Izquierdo</label>
+      
+      <div class="camera-box" [class.hidden]="previews['izquierda']" (click)="triggerFileInput('izquierda')">
+        <div class="camera-icon">📷</div>
+        <div class="camera-text">Subir foto</div>
+      </div>
+      
+      <div class="photo-preview" [class.hidden]="!previews['izquierda']" (click)="triggerFileInput('izquierda')">
+        <img *ngIf="previews['izquierda']" [src]="previews['izquierda']" alt="Foto izquierda" />
+      </div>
+      
+      <input type="file" #izquierdaInput (change)="previewImage($event, 'izquierda')" accept="image/*" style="display: none;" />
+    </div>
+
+    <!-- Lado Derecho -->
+    <div class="photo-upload">
+      <label>Lado Derecho</label>
+      
+      <div class="camera-box" [class.hidden]="previews['derecha']" (click)="triggerFileInput('derecha')">
+        <div class="camera-icon">📷</div>
+        <div class="camera-text">Subir foto</div>
+      </div>
+      
+      <div class="photo-preview" [class.hidden]="!previews['derecha']" (click)="triggerFileInput('derecha')">
+        <img *ngIf="previews['derecha']" [src]="previews['derecha']" alt="Foto derecha" />
+      </div>
+      
+      <input type="file" #derechaInput (change)="previewImage($event, 'derecha')" accept="image/*" style="display: none;" />
+    </div>
+  </div>
+
+  <button (click)="prevStep()">Anterior</button>
+  <button type="submit">Finalizar Registro</button>
+</div>
+</div>
+</ion-content>
