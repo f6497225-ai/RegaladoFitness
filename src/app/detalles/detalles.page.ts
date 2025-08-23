@@ -1,5 +1,6 @@
 import { Component, Input, input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-detalles',
@@ -12,13 +13,9 @@ export class DetallesPage  {
 
   activeTab: string = 'personal';
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(private location: Location) {}
 
-  closeModal() {
-    this.modalCtrl.dismiss();
-  }
-
-  showTab(tab: string) {
-    this.activeTab = tab;
+  volver() {
+    this.location.back(); // 👈 vuelve a la página anterior
   }
 }

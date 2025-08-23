@@ -12,7 +12,7 @@ body {
 
 /* HEADER */
 .admin-header {
-  background: linear-gradient(135deg, #c60506 0%, #8b0000 100%);
+  background: linear-gradient(135deg, #000 0%, #161616 100%);
   padding: 20px 0;
   box-shadow: 0 4px 20px rgba(198, 5, 6, 0.3);
 }
@@ -173,7 +173,7 @@ body {
 
 /* ACTION BUTTONS */
 .action-buttons { display: flex; gap: 10px; }
-.btn-action { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; transition: all 0.3s ease; }
+.btn-action { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600;  }
 .btn-view { background: #17a2b8; color: white; }
 .btn-approve { background: #28a745; color: white; }
 .btn-reject { background: #dc3545; color: white; }
@@ -234,13 +234,22 @@ body {
 
 .table-container {
   width: 100%;
-  overflow-x: auto; /* por si en móvil hay muchas columnas */
+  overflow-x: auto;   /* 👈 habilita scroll horizontal */
+  -webkit-overflow-scrolling: touch; /* scroll suave en móviles */
 }
 
 .clientes-table {
   width: 100%;
-  border-collapse: separate;   /* importante: permite separar filas */
-  border-spacing: 0 12px;      /* separación vertical entre filas */
+  border-collapse: collapse;
+  min-width: 100px; /* 👈 asegura que haya scroll si el espacio es menor */
+}
+
+.clientes-table th,
+.clientes-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap; /* 👈 evita que el texto se corte y fuerza el scroll */
 }
 
 .clientes-table thead th {
@@ -309,4 +318,29 @@ body {
 .clientes-table tbody tr td:last-child {
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
+}
+
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #c60506; /* rojo intenso */
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #a00404; /* rojo más oscuro al pasar el mouse */
+  transform: scale(1.05);
+}
+
+.logout-btn:active {
+  background-color: #800303; /* rojo aún más oscuro al hacer click */
+  transform: scale(0.98);
 }

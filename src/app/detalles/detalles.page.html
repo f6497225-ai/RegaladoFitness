@@ -1,102 +1,109 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Detalles del Cliente</ion-title>
-    <ion-buttons slot="end">
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{ cliente.nombre }}</ion-card-title>
-      <ion-card-subtitle>{{ cliente.email }} - {{ cliente.edad }} años</ion-card-subtitle>
-    </ion-card-header>
-
-    <ion-card-content>
-      <h3>Información Médica</h3>
-      <p><strong>IMC:</strong> {{ cliente.imc }}</p>
-      <p><strong>Condiciones:</strong> {{ cliente.condiciones }}</p>
-
-      <h3>Medidas Físicas</h3>
-      <p><strong>Peso:</strong> {{ cliente.peso }}</p>
-      <p><strong>Altura:</strong> {{ cliente.altura }}</p>
-      <p><strong>Cintura:</strong> {{ cliente.cintura }}</p>
-      <p><strong>Hombros:</strong> {{ cliente.hombros }}</p>
-
-      <h3>Fotos</h3>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="6" *ngFor="let foto of cliente.fotos">
-            <ion-img [src]="foto"></ion-img>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
-
-
-
-    <ion-header>
-  <ion-toolbar>
-    <ion-title>{{ cliente.nombre }}</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="closeModal()">Cerrar</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
+      <header class="admin-header">
+    <div class="header-content">
+      <div class="admin-logo">
+        <img src="assets/IMG/logoL.png" alt="Logo">
+        <div>
+          <div class="admin-title">🏋️ Regalado Fitness</div>
+        </div>
+      </div>
+      <div class="admin-info">
+        <button class="volver-btn" (click)="volver()">⬅ Volver</button>
+      </div>
+    </div>
+    </header>
 <ion-content>
-  <!-- Navigation Tabs -->
-  <div class="nav-tabs">
-    <button class="nav-tab" [class.active]="activeTab==='personal'" (click)="showTab('personal')">Personal</button>
-    <button class="nav-tab" [class.active]="activeTab==='medical'" (click)="showTab('medical')">Médica</button>
-    <button class="nav-tab" [class.active]="activeTab==='measurements'" (click)="showTab('measurements')">Medidas</button>
-    <button class="nav-tab" [class.active]="activeTab==='photos'" (click)="showTab('photos')">Fotos</button>
-  </div>
+    <br>
+<div class="container">
+        <div class="panels-container">
+            <!-- Panel Información Personal -->
+            <div class="panel">
+                <div class="panel-title">
+                    <span class="icon">👤</span>
+                    Información Personal
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Nombre</div>
+                    <div class="info-value">Juan Carlos Rodríguez</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Edad</div>
+                    <div class="info-value">34 años</div>
+                </div>
+                    <div class="info-item">
+                    <div class="info-label">Correo Electronico</div>
+                    <div class="info-value">ejemplo@gmail.com</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Teléfono</div>
+                    <div class="info-value">(809) 555-1234</div>
+                </div>
+            </div>
 
-  <!-- Tabs Content -->
-  <div class="content">
-    <!-- Personal Tab -->
-    <div *ngIf="activeTab==='personal'" class="tab-content">
-      <div class="info-card">
-        <h3>Información Personal</h3>
-        <p>Nombre: {{ cliente.nombre }}</p>
-        <p>Edad: {{ cliente.edad }} años</p>
-        <p>Email: {{ cliente.email }}</p>
-        <p>Fecha de Ingreso: {{ cliente.fechaIngreso }}</p>
-      </div>
-    </div>
+            <!-- Panel Información Médica -->
+            <div class="panel">
+                <div class="panel-title">
+                    <span class="icon">🏥</span>
+                    Información Médica
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Enfermedad o condición médica</div>
+                    <div class="info-value">Ninguna</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">incapacidad</div>
+                    <div class="info-value">Ninguna</div>
+                </div>
+            </div>
 
-    <!-- Medical Tab -->
-    <div *ngIf="activeTab==='medical'" class="tab-content">
-      <div class="info-card">
-        <h3>Información Médica</h3>
-        <p>IMC: {{ cliente.imc }}</p>
-        <p>Condiciones: {{ cliente.condiciones }}</p>
-      </div>
-    </div>
+            <!-- Panel Medidas Físicas -->
+            <div class="panel">
+                <div class="panel-title">
+                    <span class="icon">📏</span>
+                    Medidas Físicas
+                </div>
+                
+                <div class="measurement-item">
+                    <span>Peso</span>
+                    <span class="measurement-value">75.2 kg</span>
+                </div>
+                <div class="measurement-item">
+                    <span>Altura</span>
+                    <span class="measurement-value">178 cm</span>
+                </div>
+                <div class="measurement-item">
+                    <span>IMC</span>
+                    <span class="measurement-value">23.7</span>
+                </div>
+            </div>
+        </div>
 
-    <!-- Measurements Tab -->
-    <div *ngIf="activeTab==='measurements'" class="tab-content">
-      <div class="info-card">
-        <h3>Medidas</h3>
-        <p>Peso: {{ cliente.peso }} kg</p>
-        <p>Altura: {{ cliente.altura }} cm</p>
-      </div>
+        <!-- Panel de Fotos -->
+        <div class="photos-panel">
+            <div class="photos-title">
+                <span class="icon">📸</span>
+                Fotos del Cliente
+            </div>
+            
+            <div class="photos-grid">
+                <div class="photo-card">
+                    <div class="photo-placeholder">📷</div>
+                    <div class="photo-label">Foto Frontal</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-placeholder">📷</div>
+                    <div class="photo-label">Foto Lateral</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-placeholder">📷</div>
+                    <div class="photo-label">Foto Posterior</div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-placeholder">📷</div>
+                    <div class="photo-label">Foto de Perfil</div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Photos Tab -->
-    <div *ngIf="activeTab==='photos'" class="tab-content">
-      <div class="info-card">
-        <h3>Fotos</h3>
-        <p>Aquí se podrían mostrar fotos reales del cliente</p>
-      </div>
-    </div>
-  </div>
 </ion-content>
-
-</ion-content>
-
-

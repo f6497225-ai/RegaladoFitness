@@ -23,7 +23,8 @@ const routes: Routes = [
   },
   {
     path: 'detalles',
-    loadChildren: () => import('./detalles/detalles.module').then( m => m.DetallesPageModule)
+    loadChildren: () => import('./detalles/detalles.module').then( m => m.DetallesPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'phadmin-gr',

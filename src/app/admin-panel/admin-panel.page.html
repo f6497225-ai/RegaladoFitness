@@ -9,8 +9,7 @@
         </div>
       </div>
       <div class="admin-info">
-        <h3>👨‍💼 Admin: Juan Regalado</h3>
-        <p>📅 Última conexión: Hoy, 10:30 AM</p>
+        <button class="logout-btn" (click)="logout()">Cerrar Sesión</button>
       </div>
     </div>
   </header>
@@ -85,7 +84,7 @@
           <td>{{ cliente.condiciones }}</td>
           <td>
             <div class="action-buttons">
-             <button type="submit" class="btn-action btn-view" (click)="verDetalles(cliente)">👁️</button>
+             <button class="btn-action btn-view" (click)="verDetalles(cliente)">👁️</button>
             </div>
           </td>
         </tr>

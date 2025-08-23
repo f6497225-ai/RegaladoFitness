@@ -61,7 +61,6 @@ clientesFiltrados = [...this.clientes];
 constructor(private router: Router) {}
 
 verDetalles(cliente: any) {
-  // Enviamos el cliente a la página de detalles usando el state
   this.router.navigate(['/detalles'], { state: { cliente: cliente } });
 }
 
@@ -81,4 +80,14 @@ limpiarFiltros() {
   this.filtros = { estado: '', modalidad: '', nombre: '' };
   this.clientesFiltrados = [...this.clientes];
 }
+
+logout() {
+  localStorage.removeItem('token');
+  this.router.navigate(['/phadmin-gr']);
+}
+
+  irADetalles() {
+    this.router.navigate(['/detalles']); // ← Ruta de la otra página
+  }
+
 }
