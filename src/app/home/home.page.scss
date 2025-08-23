@@ -210,9 +210,7 @@
 
         .service-card {
             background: white;
-           
             border-radius: 15px;
-            text-align: center;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border: 2px solid transparent;
@@ -224,7 +222,7 @@
         .service-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #ff3131, #960606);
+            background: #ebeaea;
             border-radius: 50%;
             margin: 0 auto 1.5rem;
             display: flex;
@@ -237,11 +235,11 @@
         
 
         .service-card li {
+            padding-left: 50px;
         color: #333;
         margin-bottom: 1rem;
         font-size: 1.2rem;
         line-height: 1.6;
-        justify-content: center;
         display: flex;
         align-items: center;
         gap: 0.5rem;
