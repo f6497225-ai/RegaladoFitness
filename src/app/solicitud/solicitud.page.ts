@@ -1,4 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { ApiService } from '../../service/api';
+
 
 @Component({
   selector: 'app-solicitud',
@@ -7,76 +10,144 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
   standalone: false
 })
 export class SolicitudPage {
-currentStep = 1;
   menuOpen = false;
-  previews: { [key: string]: string | null } = {
-    frente: null,
-    espalda: null,
-    izquierda: null,
-    derecha: null
-  };
+  @ViewChild('solForm') solForm!: NgForm;
 
-  // Referencias a los inputs file
+  // Inputs de fotos
   @ViewChild('frenteInput') frenteInput!: ElementRef;
   @ViewChild('espaldaInput') espaldaInput!: ElementRef;
   @ViewChild('izquierdaInput') izquierdaInput!: ElementRef;
   @ViewChild('derechaInput') derechaInput!: ElementRef;
 
-  constructor() { }
+  currentStep = 1;
+  isLoading = false;
 
-  // Función para disparar el input file
-  triggerFileInput(type: string) {
-    const inputMap: { [key: string]: ElementRef } = {
-      frente: this.frenteInput,
-      espalda: this.espaldaInput,
-      izquierda: this.izquierdaInput,
-      derecha: this.derechaInput
-    };
+  cliente: any = {
+    nombre: '',
+    correo: '',
+    telefono: '',
+    fechaNacimiento: '',
+    altura: null,
+    alturaUnidad: 'cm',
+    peso: null,
+    pesoUnidad: 'kg',
+    enfermedades: '',
+    incapacidades: '',
+    modalidad: '',
+    foto_frente: '',
+    foto_espalda: '',
+    foto_izquierda: '',
+    foto_derecha: ''
+  };
 
-    const inputRef = inputMap[type];
-    if (inputRef) {
-      inputRef.nativeElement.click();
-    }
-  }
+  previews: any = {
+    frente: '',
+    espalda: '',
+    izquierda: '',
+    derecha: ''
+  };
 
-  // Función para previsualizar imagen
-  previewImage(event: any, type: string) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.previews[type] = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+  constructor(private api: ApiService) {}
 
-  // Función para el menú hamburguesa
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
-  // Navegación entre pasos
   nextStep() {
-    if (this.currentStep < 2) {
-      this.currentStep++;
-    }
+    if (this.currentStep < 2) this.currentStep++;
   }
 
   prevStep() {
-    if (this.currentStep > 1) {
-      this.currentStep--;
+    if (this.currentStep > 1) this.currentStep--;
+  }
+
+  triggerFileInput(campo: string) {
+    switch (campo) {
+      case 'frente': this.frenteInput.nativeElement.click(); break;
+      case 'espalda': this.espaldaInput.nativeElement.click(); break;
+      case 'izquierda': this.izquierdaInput.nativeElement.click(); break;
+      case 'derecha': this.derechaInput.nativeElement.click(); break;
     }
   }
 
-  // Función para enviar formulario
-  onSubmit() {
-    console.log('Formulario enviado');
-    console.log('Previews:', this.previews);
-    // Aquí puedes manejar el envío del formulario
+  previewImage(event: any, campo: string) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2_000_000) {
+      alert('La imagen es demasiado grande. Intenta con una más pequeña.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      this.previews[campo] = base64;
+      this.cliente[`foto_${campo}`] = base64;
+    };
+    reader.readAsDataURL(file);
   }
 
-  
-  
+  validarFormulario(): boolean {
+    if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono || 
+        !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso || 
+        !this.cliente.modalidad) {
+      alert('Por favor completa todos los campos obligatorios');
+      return false;
+    }
+    return true;
+  }
+
+  resetFormData() {
+    this.solForm.resetForm();
+    this.cliente = {
+      nombre: '', correo: '', telefono: '', fechaNacimiento: '',
+      altura: null, alturaUnidad: 'cm', peso: null, pesoUnidad: 'kg',
+      enfermedades: '', incapacidades: '', modalidad: '',
+      foto_frente: '', foto_espalda: '', foto_izquierda: '', foto_derecha: ''
+    };
+    this.previews = { frente: '', espalda: '', izquierda: '', derecha: '' };
+    this.currentStep = 1;
+  }
+
+onSubmit() {
+  if (!this.validarFormulario()) return;
+
+  this.isLoading = true;
+
+  // Crear FormData
+  const formData = new FormData();
+  formData.append('nombre', this.cliente.nombre);
+  formData.append('correo', this.cliente.correo);
+  formData.append('telefono', this.cliente.telefono);
+  formData.append('fecha_nacimiento', this.cliente.fechaNacimiento);
+  formData.append('altura', String(this.cliente.altura));
+  formData.append('altura_unidad', this.cliente.alturaUnidad);
+  formData.append('peso', String(this.cliente.peso));
+  formData.append('peso_unidad', this.cliente.pesoUnidad);
+  formData.append('enfermedades', this.cliente.enfermedades);
+  formData.append('incapacidades', this.cliente.incapacidades);
+  formData.append('modalidad', this.cliente.modalidad);
+
+  // Archivos reales
+  if (this.frenteInput.nativeElement.files[0]) formData.append('foto_frente', this.frenteInput.nativeElement.files[0]);
+  if (this.espaldaInput.nativeElement.files[0]) formData.append('foto_espalda', this.espaldaInput.nativeElement.files[0]);
+  if (this.izquierdaInput.nativeElement.files[0]) formData.append('foto_izquierda', this.izquierdaInput.nativeElement.files[0]);
+  if (this.derechaInput.nativeElement.files[0]) formData.append('foto_derecha', this.derechaInput.nativeElement.files[0]);
+
+  // Enviar al backend
+  this.api.registrarClienteFormData(formData).subscribe({
+    next: res => {
+      this.isLoading = false;
+      alert('Cliente registrado correctamente');
+      this.resetFormData();
+    },
+    error: err => {
+      this.isLoading = false;
+      console.error('Error al registrar cliente:', err);
+      alert('Error al registrar cliente');
+    }
+  });
+  }
 }
 

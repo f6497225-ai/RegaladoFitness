@@ -23,36 +23,38 @@
 <ion-content [fullscreen]="true">
 <img src="assets/IMG/Logo2.jpg" alt="Logo" class="hero-logo" />
      
-<div class="form-container">
+<form #solForm="ngForm" (ngSubmit)="onSubmit()">
   <!-- Paso 1 -->
   <div *ngIf="currentStep === 1" class="step">
     <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Información Personal</h2>
                     
                     <div class="form-group">
                         <label for="nombre">Nombre Completo *</label>
-                        <input type="text" id="nombre" name="nombre"  placeholder="Nombre Completo" required>
+                        <input type="text" id="nombre" name="nombre" [(ngModel)]="cliente.nombre" placeholder="Nombre Completo" required>
+
                     </div>
                     <div class="form-group">
                         <label for="nombre">Correo Electronico *</label>
-                        <input type="text" id="nombre" name="nombre"  placeholder="Ejemplo@ejemplo.com" required>
+                        <input type="email" id="correo" name="correo" [(ngModel)]="cliente.correo" placeholder="Ejemplo@ejemplo.com" required>
+
                     </div>
                     <div class="form-group">
                         <label for="nombre">Telefono *</label>
-                        <input type="text" id="nombre" name="nombre"  placeholder="(809) 000-0000" required>
+                        <input type="tel" id="telefono" name="telefono" [(ngModel)]="cliente.telefono" placeholder="(809) 000-0000" required>
                     </div>
                     <div class="form-row">
                         <div class="form-col">
                             <div class="form-group">
                                 <label for="fechaNacimiento">Fecha de Nacimiento *</label>
-                                <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+                                <input type="date" id="fechaNacimiento" name="fechaNacimiento" [(ngModel)]="cliente.fechaNacimiento" required>
                             </div>
                         </div>
                         <div class="form-col">
                           <div class="form-group">
                             <label for="altura">Altura *</label>
                             <div style="display: flex; gap: 8px;">
-                              <input type="number" id="altura" name="altura" min="4" max="250" placeholder="Ej: 170" required>
-                              <select id="alturaUnidad" name="alturaUnidad">
+                              <input type="number" id="altura" name="altura" [(ngModel)]="cliente.altura" min="4" max="250" placeholder="Ej: 170" required>
+                              <select id="alturaUnidad" name="alturaUnidad" [(ngModel)]="cliente.alturaUnidad">
                                 <option value="cm">cm</option>
                                 <option value="ft">pies</option>
                               </select>
@@ -64,8 +66,8 @@
                           <div class="form-group">
                             <label for="peso">Peso *</label>
                             <div style="display: flex; gap: 8px;">
-                              <input type="number" id="peso" name="peso" min="30" max="300" step="0.1" placeholder="Ej: 70" required>
-                              <select id="pesoUnidad" name="pesoUnidad">
+                              <input type="number" id="peso" name="peso" [(ngModel)]="cliente.peso" min="30" max="300" step="0.1" required>
+                              <select id="pesoUnidad" name="pesoUnidad" [(ngModel)]="cliente.pesoUnidad">
                                 <option value="kg">kg</option>
                                 <option value="lb">lb</option>
                               </select>
@@ -76,17 +78,23 @@
 
                     <div class="form-group">
                         <label for="enfermedades">¿Tiene alguna enfermedad o condición médica?</label>
-                        <textarea id="enfermedades" name="enfermedades" placeholder="Describa cualquier condición médica relevante (diabetes, hipertensión, lesiones previas, etc.)"></textarea>
-                    </div>
+                        <textarea id="enfermedades" 
+          name="enfermedades" 
+          [(ngModel)]="cliente.enfermedades"
+          placeholder="Describa cualquier condición médica relevante (diabetes, hipertensión, lesiones previas, etc.)">
+</textarea></div>
 
                     <div class="form-group">
                         <label for="incapacidades">¿Tiene alguna incapacidad para realizar ejercicios?</label>
-                        <textarea id="incapacidades" name="incapacidades" placeholder="Describa cualquier limitación física o restricción médica para ejercitarse"></textarea>
-                    </div>
+                        <textarea id="incapacidades" 
+          name="incapacidades" 
+          [(ngModel)]="cliente.incapacidades"
+          placeholder="Describa cualquier limitación física o restricción médica para ejercitarse">
+</textarea></div>
 
 <div class="form-group">
   <label for="modalidad">Modalidad de Servicio *</label>
-  <select id="modalidad" name="modalidad" required>
+<select id="modalidad" name="modalidad" [(ngModel)]="cliente.modalidad" required>
     <option value="" disabled selected>Seleccione una opción</option>
     <option value="presencial">Presencial</option>
     <option value="online">Online</option>
@@ -95,8 +103,7 @@
 </div>
 
 
-
-    <button (click)="nextStep()">Siguiente</button>
+<button type="button" (click)="nextStep()">Siguiente</button>
   </div>
 
 <div *ngIf="currentStep === 2" class="step">
@@ -170,8 +177,11 @@
     </div>
   </div>
 
-  <button (click)="prevStep()">Anterior</button>
-  <button type="submit">Finalizar Registro</button>
+<button type="button" (click)="prevStep()">Anterior</button>
+    <button type="submit">Finalizar Registro</button>
 </div>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+  <p>Subiendo… por favor espera</p>
 </div>
 </ion-content>

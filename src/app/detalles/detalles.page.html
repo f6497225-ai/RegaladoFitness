@@ -1,109 +1,124 @@
-      <header class="admin-header">
-    <div class="header-content">
-      <div class="admin-logo">
-        <img src="assets/IMG/logoL.png" alt="Logo">
-        <div>
-          <div class="admin-title">🏋️ Regalado Fitness</div>
-        </div>
-      </div>
-      <div class="admin-info">
-        <button class="volver-btn" (click)="volver()">⬅ Volver</button>
+<header class="admin-header">
+  <div class="header-content">
+    <div class="admin-logo">
+      <img src="assets/IMG/logoL.png" alt="Logo">
+      <div>
+        <div class="admin-title">🏋️ Regalado Fitness</div>
       </div>
     </div>
-    </header>
+    <div class="admin-info">
+      <button class="volver-btn" (click)="volver()">⬅ Volver</button>
+    </div>
+  </div>
+</header>
+
 <ion-content>
-    <br>
-<div class="container">
-        <div class="panels-container">
-            <!-- Panel Información Personal -->
-            <div class="panel">
-                <div class="panel-title">
-                    <span class="icon">👤</span>
-                    Información Personal
-                </div>
-                
-                <div class="info-item">
-                    <div class="info-label">Nombre</div>
-                    <div class="info-value">Juan Carlos Rodríguez</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Edad</div>
-                    <div class="info-value">34 años</div>
-                </div>
-                    <div class="info-item">
-                    <div class="info-label">Correo Electronico</div>
-                    <div class="info-value">ejemplo@gmail.com</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Teléfono</div>
-                    <div class="info-value">(809) 555-1234</div>
-                </div>
-            </div>
-
-            <!-- Panel Información Médica -->
-            <div class="panel">
-                <div class="panel-title">
-                    <span class="icon">🏥</span>
-                    Información Médica
-                </div>
-                
-                <div class="info-item">
-                    <div class="info-label">Enfermedad o condición médica</div>
-                    <div class="info-value">Ninguna</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">incapacidad</div>
-                    <div class="info-value">Ninguna</div>
-                </div>
-            </div>
-
-            <!-- Panel Medidas Físicas -->
-            <div class="panel">
-                <div class="panel-title">
-                    <span class="icon">📏</span>
-                    Medidas Físicas
-                </div>
-                
-                <div class="measurement-item">
-                    <span>Peso</span>
-                    <span class="measurement-value">75.2 kg</span>
-                </div>
-                <div class="measurement-item">
-                    <span>Altura</span>
-                    <span class="measurement-value">178 cm</span>
-                </div>
-                <div class="measurement-item">
-                    <span>IMC</span>
-                    <span class="measurement-value">23.7</span>
-                </div>
-            </div>
+  <br>
+  <div class="container" *ngIf="cliente">
+    <div class="panels-container">
+      <!-- Información Personal -->
+      <div class="panel">
+        <div class="panel-title">👤 Información Personal</div>
+        <div class="info-item">
+          <div class="info-label">Nombre</div>
+          <div class="info-value">{{ cliente.nombre }}</div>
         </div>
-
-        <!-- Panel de Fotos -->
-        <div class="photos-panel">
-            <div class="photos-title">
-                <span class="icon">📸</span>
-                Fotos del Cliente
-            </div>
-            
-            <div class="photos-grid">
-                <div class="photo-card">
-                    <div class="photo-placeholder">📷</div>
-                    <div class="photo-label">Foto Frontal</div>
-                </div>
-                <div class="photo-card">
-                    <div class="photo-placeholder">📷</div>
-                    <div class="photo-label">Foto Lateral</div>
-                </div>
-                <div class="photo-card">
-                    <div class="photo-placeholder">📷</div>
-                    <div class="photo-label">Foto Posterior</div>
-                </div>
-                <div class="photo-card">
-                    <div class="photo-placeholder">📷</div>
-                    <div class="photo-label">Foto de Perfil</div>
-                </div>
-            </div>
+        <div class="info-item">
+          <div class="info-label">Edad</div>
+          <div class="info-value">{{ calcularEdad(cliente.fecha_nacimiento) }} años</div>
         </div>
+<div class="info-item">
+  <div class="info-label">Correo Electrónico</div>
+  <div class="info-value">
+    <a [href]="'mailto:' + cliente.correo">
+      {{ cliente.correo }}
+    </a>
+  </div>
+</div>
+<div class="info-item">
+  <div class="info-label">Teléfono</div>
+  <div class="info-value">
+    <a [href]="'https://wa.me/' + cliente.telefono" target="_blank">
+      {{ cliente.telefono }}
+    </a>
+  </div>
+</div>
+      </div>
+
+      <!-- Información Médica -->
+      <div class="panel">
+        <div class="panel-title">🏥 Información Médica</div>
+        <div class="info-item">
+          <div class="info-label">Enfermedad o condición médica</div>
+          <div class="info-value">{{ cliente.enfermedades || 'Ninguna' }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Incapacidad</div>
+          <div class="info-value">{{ cliente.incapacidades || 'Ninguna' }}</div>
+        </div>
+      </div>
+
+      <!-- Medidas Físicas -->
+      <div class="panel">
+        <div class="panel-title">📏 Medidas Físicas</div>
+        <div class="measurement-item">
+          <span>Peso</span>
+          <span class="measurement-value">{{ cliente.peso }} {{ cliente.peso_unidad }}</span>
+        </div>
+        <div class="measurement-item">
+          <span>Altura</span>
+          <span class="measurement-value">{{ cliente.altura }} {{ cliente.altura_unidad }}</span>
+        </div>
+        <div class="measurement-item">
+          <span>IMC</span>
+          <span class="measurement-value">
+            {{ calcularIMC(cliente.peso, cliente.altura, cliente.altura_unidad, cliente.peso_unidad) }}
+          </span>
+        </div>
+        <div class="measurement-item" *ngIf="cliente.peso && cliente.altura">
+  <span>Nivel de peso</span>
+  <span class="measurement-value" 
+        [style.color]="getNivelPeso(cliente.peso, cliente.altura, cliente.altura_unidad, cliente.peso_unidad).color">
+    {{ getNivelPeso(cliente.peso, cliente.altura, cliente.altura_unidad, cliente.peso_unidad).texto }}
+  </span>
+</div>
+      </div>
     </div>
+
+    <!-- Fotos del Cliente -->
+    <div class="photos-panel">
+      <div class="photos-title">📸 Fotos del Cliente</div>
+      <div class="photos-grid">
+        <!-- Frente -->
+        <div class="photo-card" *ngIf="cliente.foto_frente" (click)="abrirZoom(cliente.foto_frente)">
+          <img [src]="cliente.foto_frente" alt="Foto Frente">
+          <div class="photo-label">Frente</div>
+        </div>
+
+        <!-- Izquierda -->
+        <div class="photo-card" *ngIf="cliente.foto_izquierda" (click)="abrirZoom(cliente.foto_izquierda)">
+          <img [src]="cliente.foto_izquierda" alt="Foto Izquierda">
+          <div class="photo-label">Izquierda</div>
+        </div>
+
+        <!-- Espalda -->
+        <div class="photo-card" *ngIf="cliente.foto_espalda" (click)="abrirZoom(cliente.foto_espalda)">
+          <img [src]="cliente.foto_espalda" alt="Foto Espalda">
+          <div class="photo-label">Espalda</div>
+        </div>
+
+        <!-- Derecha -->
+        <div class="photo-card" *ngIf="cliente.foto_derecha" (click)="abrirZoom(cliente.foto_derecha)">
+          <img [src]="cliente.foto_derecha" alt="Foto Derecha">
+          <div class="photo-label">Derecha</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay para Zoom -->
+    <div class="zoom-overlay" *ngIf="imagenZoom" (click)="cerrarZoom()">
+      <img [src]="imagenZoom" alt="Zoom cliente" class="zoomed-image">
+    </div>
+
+  </div>
 </ion-content>
