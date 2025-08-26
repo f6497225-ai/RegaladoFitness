@@ -335,5 +335,15 @@ button + button {
   font-weight: bold;
   font-size: 18px;
 }
+.form-error {
+  background-color: #ffe5e5;
+  color: #d8000c;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
 
 
