@@ -40,8 +40,19 @@
 
         <div class="form-group">
           <label for="telefono">Teléfono *</label>
-          <input type="tel" id="telefono" name="telefono" [(ngModel)]="cliente.telefono" placeholder="(809) 000-0000" required>
+          <input 
+            type="tel" 
+            id="telefono" 
+            name="telefono" 
+            [(ngModel)]="cliente.telefono"
+            placeholder="8090000000" 
+            required
+            maxlength="10"
+            pattern="[0-9]{10}"
+            title="El teléfono debe tener exactamente 10 dígitos"
+          >
         </div>
+
 
         <div class="form-row">
           <div class="form-col">
@@ -90,7 +101,9 @@
             placeholder="Describa cualquier limitación física o restricción médica para ejercitarse"></textarea>
         </div>
 
-
+        <div *ngIf="errorMessage" class="form-error">
+          {{ errorMessage }}
+        </div>
 
         <button type="button" (click)="nextStep()">Siguiente</button>
       </div>
@@ -103,14 +116,14 @@
     <label for="modalidad">Modalidad de Servicio *</label>
     <select id="modalidad" name="modalidad" [(ngModel)]="planSeleccionado" (change)="onModalidadChange()" required>
       <option value="" disabled selected>Seleccione una opción</option>
-      <option value="Presencial">Presencial</option>
-      <option value="Online">Online</option>
-      <option value="Hibrido">Híbrido</option>
+      <option value="presencial">Presencial</option>
+      <option value="online">Online</option>
+      <option value="hibrido">Híbrido</option>
     </select>
   </div>
 
   <!-- Selección de días solo si no es online -->
-  <div class="form-group" *ngIf="planSeleccionado !== 'Online'">
+  <div class="form-group" *ngIf="planSeleccionado !== 'online'">
     <label for="dias">Cantidad de Días *</label>
     <select id="dias" name="dias" [(ngModel)]="diasSeleccionados" (change)="onDiasChange()" required>
       <option value="" disabled selected>Seleccione una opción</option>
@@ -123,6 +136,9 @@
   <!-- Mostrar precio automáticamente -->
   <div *ngIf="precio > 0" class="precio-box">
     <h3>Precio: RD$ {{ precio }}</h3>
+  </div>
+  <div *ngIf="errorMessage" class="form-error">
+    {{ errorMessage }}
   </div>
 
   <button type="button" (click)="prevStep()">Anterior</button>
@@ -194,8 +210,9 @@
     </form>
   </div>
 
-  <div *ngIf="isLoading" class="loading-overlay">
-    <p>Subiendo… por favor espera</p>
-  </div>
-</ion-content>
+<div *ngIf="isLoading" class="loading-overlay">
+  <p *ngIf="!isComplete">⏳ Subiendo… por favor espera</p>
+  <p *ngIf="isComplete">✅ ¡Registrado correctamente!</p>
+</div>
 
+</ion-content>
