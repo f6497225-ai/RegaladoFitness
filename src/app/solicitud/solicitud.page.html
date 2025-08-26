@@ -62,31 +62,84 @@
             </div>
           </div>
 
-          <div class="form-col">
-            <div class="form-group">
-              <label for="altura">Altura *</label>
-              <div style="display: flex; gap: 8px;">
-                <input type="number" id="altura" name="altura" [(ngModel)]="cliente.altura" min="4" max="250" placeholder="Ej: 170" required>
-                <select id="alturaUnidad" name="alturaUnidad" [(ngModel)]="cliente.alturaUnidad">
-                  <option value="cm">cm</option>
-                  <option value="ft">pies</option>
-                </select>
-              </div>
-            </div>
-          </div>
+<div class="form-col">
+  <!-- ALTURA -->
+  <div class="form-group">
+    <label for="altura">Altura *</label>
+    <div style="display: flex; gap: 8px; align-items: center;">
 
-          <div class="form-col">
-            <div class="form-group">
-              <label for="peso">Peso *</label>
-              <div style="display: flex; gap: 8px;">
-                <input type="number" id="peso" name="peso" [(ngModel)]="cliente.peso" min="30" max="300" step="0.1" required>
-                <select id="pesoUnidad" name="pesoUnidad" [(ngModel)]="cliente.pesoUnidad">
-                  <option value="kg">kg</option>
-                  <option value="lb">lb</option>
-                </select>
-              </div>
-            </div>
-          </div>
+      <!-- Input en centímetros -->
+      <input 
+        *ngIf="cliente.alturaUnidad === 'cm'" 
+        type="number" 
+        id="alturaCm" 
+        name="alturaCm" 
+        [(ngModel)]="cliente.altura" 
+        min="30" max="250" 
+        placeholder="Ej: 170 cm" 
+        required
+      >
+
+      <!-- Input en pies -->
+      <input 
+        *ngIf="cliente.alturaUnidad === 'ft'" 
+        type="number" 
+        step="0.01"
+        id="alturaFt" 
+        name="alturaFt" 
+        [(ngModel)]="cliente.altura" 
+        min="1" max="8" 
+        placeholder="Ej: 5.8 ft" 
+        required
+      >
+
+      <!-- Select de unidad -->
+      <select id="alturaUnidad" name="alturaUnidad" [(ngModel)]="cliente.alturaUnidad">
+        <option value="cm">cm</option>
+        <option value="ft">ft</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- PESO -->
+  <div class="form-group">
+    <label for="peso">Peso *</label>
+    <div style="display: flex; gap: 8px; align-items: center;">
+
+      <!-- Input en kilogramos -->
+      <input 
+        *ngIf="cliente.pesoUnidad === 'kg'" 
+        type="number" 
+        step="0.1"
+        id="pesoKg" 
+        name="pesoKg" 
+        [(ngModel)]="cliente.peso" 
+        min="20" max="300" 
+        placeholder="Ej: 70.5 kg" 
+        required
+      >
+
+      <!-- Input en libras -->
+      <input 
+        *ngIf="cliente.pesoUnidad === 'lb'" 
+        type="number" 
+        step="0.1"
+        id="pesoLb" 
+        name="pesoLb" 
+        [(ngModel)]="cliente.peso" 
+        min="50" max="700" 
+        placeholder="Ej: 150.2 lb"  
+        required
+      >
+
+      <!-- Select de unidad de peso -->
+      <select id="pesoUnidad" name="pesoUnidad" [(ngModel)]="cliente.pesoUnidad">
+        <option value="kg">kg</option>
+        <option value="lb">lb</option>
+      </select>
+    </div>
+  </div>
+</div>
         </div>
 
         <div class="form-group">
@@ -116,14 +169,14 @@
     <label for="modalidad">Modalidad de Servicio *</label>
     <select id="modalidad" name="modalidad" [(ngModel)]="planSeleccionado" (change)="onModalidadChange()" required>
       <option value="" disabled selected>Seleccione una opción</option>
-      <option value="presencial">Presencial</option>
-      <option value="online">Online</option>
-      <option value="hibrido">Híbrido</option>
+      <option value="Presencial">Presencial</option>
+      <option value="Online">Online</option>
+      <option value="Hibrido">Híbrido</option>
     </select>
   </div>
 
   <!-- Selección de días solo si no es online -->
-  <div class="form-group" *ngIf="planSeleccionado !== 'online'">
+  <div class="form-group" *ngIf="planSeleccionado !== 'Online'">
     <label for="dias">Cantidad de Días *</label>
     <select id="dias" name="dias" [(ngModel)]="diasSeleccionados" (change)="onDiasChange()" required>
       <option value="" disabled selected>Seleccione una opción</option>

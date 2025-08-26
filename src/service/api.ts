@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://backend-1-al3s.onrender.com'; // o la URL pública de tu backend
+  private apiUrl = 'http://localhost:3000'; // o la URL pública de tu backend
 
   constructor(private http: HttpClient) {}
 
@@ -38,4 +38,11 @@ actualizarEstado(id: number, estado: string): Observable<any> {
   const headers = { Authorization: `Bearer ${token}` };
   return this.http.patch(`${this.apiUrl}/clientes/${id}/estado`, { estado }, { headers });
 }
+
+eliminarCliente(id: number): Observable<any> {
+  const token = localStorage.getItem('token') || '';
+  const headers = { Authorization: `Bearer ${token}` };
+  return this.http.delete(`${this.apiUrl}/clientes/${id}`, { headers });
+}
+
 }

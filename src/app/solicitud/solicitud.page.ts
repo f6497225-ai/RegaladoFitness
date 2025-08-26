@@ -33,6 +33,9 @@ export class SolicitudPage {
     enfermedades: '',
     incapacidades: '',
     modalidad: '',
+    precio: 0,
+    estado: 'Pendiente',
+    dias: null,
     foto_frente: '',
     foto_espalda: '',
     foto_izquierda: '',
@@ -79,7 +82,7 @@ nextStep() {
       return;
     }
 
-    if ((this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') && !this.diasSeleccionados) {
+    if ((this.planSeleccionado === 'Presencial' || this.planSeleccionado === 'Hibrido') && !this.diasSeleccionados) {
       this.errorMessage = 'Por favor selecciona la cantidad de días';
       return;
     }
@@ -127,7 +130,7 @@ nextStep() {
   // Modalidad seleccionada
   onModalidadChange() {
     this.diasSeleccionados = null;
-    if (this.planSeleccionado === 'online') {
+    if (this.planSeleccionado === 'Online') {
       this.precio = 3500;
     } else {
       this.precio = 0;
@@ -136,7 +139,7 @@ nextStep() {
 
   // Días seleccionados
   onDiasChange() {
-    if (this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') {
+    if (this.planSeleccionado === 'ppresencial' || this.planSeleccionado === 'Hibrido') {
       switch (Number(this.diasSeleccionados)) {
         case 3: this.precio = 3000; break;
         case 4: this.precio = 3500; break;
@@ -201,6 +204,8 @@ onSubmit() {
     formData.append('enfermedades', this.cliente.enfermedades);
     formData.append('incapacidades', this.cliente.incapacidades);
     formData.append('modalidad', this.planSeleccionado);
+    formData.append('precio', String(this.precio));
+    formData.append('estado', 'Pendiente');
     formData.append('dias', this.diasSeleccionados ? String(this.diasSeleccionados) : '');
 
     if (this.frenteInput.nativeElement.files[0]) formData.append('foto_frente', this.frenteInput.nativeElement.files[0]);

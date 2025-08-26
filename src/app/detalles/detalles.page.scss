@@ -315,3 +315,32 @@
 .seet {
     background-color: #ececec;
 }
+
+.acciones-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* separa select y botón */
+  margin-top: 10px;
+}
+
+.acciones-select {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espacio entre label y select */
+}
+
+.eliminar-btn {
+  background-color: #d9534f;
+  border: none;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.eliminar-btn:hover {
+  background-color: #c9302c;
+}

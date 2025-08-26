@@ -17,24 +17,32 @@
   <div class="container" *ngIf="cliente">
 
     <!-- ACCIONES DEL CLIENTE -->
-    <div class="acciones-panel">
-      <div class="acciones-title">⚡ Acciones</div>
-      <div class="acciones-select">
-        <label for="estado-select">Cambiar Estado:</label>
-        <select class="seet" id="estado-select" [(ngModel)]="cliente.estado" (change)="actualizarEstado(cliente.estado)">
-          <option value="aceptada">Aceptada</option>
-          <option value="rechazada">Rechazada</option>
-        </select>
-      </div>
-      <div class="estado-actual">
-        Estado actual: 
-        <span [ngClass]="{
-          'estado-pendiente': cliente.estado === 'pendiente',
-          'estado-aceptada': cliente.estado === 'aceptada',
-          'estado-rechazada': cliente.estado === 'rechazada'
-        }">{{ cliente.estado | titlecase }}</span>
-      </div>
+<!-- ACCIONES DEL CLIENTE -->
+<div class="acciones-panel">
+  <div class="acciones-title">⚡ Acciones</div>
+  
+  <div class="acciones-flex">
+    <div class="acciones-select">
+      <label for="estado-select">Cambiar Estado:</label>
+      <select class="seet" id="estado-select" [(ngModel)]="cliente.estado" (change)="actualizarEstado(cliente.estado)">
+        <option value="aceptada">Aceptada</option>
+        <option value="rechazada">Rechazada</option>
+      </select>
     </div>
+
+    <!-- Botón Eliminar alineado a la derecha -->
+    <button class="eliminar-btn" (click)="eliminarCliente(cliente.id)">Eliminar</button>
+  </div>
+
+  <div class="estado-actual">
+    Estado actual: 
+    <span [ngClass]="{
+      'estado-pendiente': cliente.estado === 'pendiente',
+      'estado-aceptada': cliente.estado === 'aceptada',
+      'estado-rechazada': cliente.estado === 'rechazada'
+    }">{{ cliente.estado | titlecase }}</span>
+  </div>
+</div>
 
     <!-- PANEL DE INFORMACIÓN DEL CLIENTE -->
     <div class="panels-container">
