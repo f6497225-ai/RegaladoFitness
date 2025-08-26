@@ -285,3 +285,33 @@
   border-radius: 8px;
 }
 
+.acciones-panel {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+.acciones-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.acciones-select label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+.acciones-select select {
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.estado-actual {
+  margin-top: 10px;
+  font-weight: bold;
+}
+.estado-pendiente { color: orange; }
+.estado-aceptada { color: green; }
+.estado-rechazada { color: red; }
+
+.seet {
+    background-color: #ececec;
+}

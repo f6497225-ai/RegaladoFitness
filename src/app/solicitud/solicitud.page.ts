@@ -2,7 +2,6 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ApiService } from '../../service/api';
 
-
 @Component({
   selector: 'app-solicitud',
   templateUrl: './solicitud.page.html',
@@ -34,6 +33,9 @@ export class SolicitudPage {
     enfermedades: '',
     incapacidades: '',
     modalidad: '',
+    estado: 'pendiente',
+    dias: null,
+    precio: '',
     foto_frente: '',
     foto_espalda: '',
     foto_izquierda: '',
@@ -47,6 +49,11 @@ export class SolicitudPage {
     derecha: ''
   };
 
+  // Plan y días
+  planSeleccionado: string = '';
+  diasSeleccionados: number | null = null;
+  precio: number = 0;
+
   constructor(private api: ApiService) {}
 
   toggleMenu() {
@@ -54,7 +61,28 @@ export class SolicitudPage {
   }
 
   nextStep() {
-    if (this.currentStep < 2) this.currentStep++;
+    // Validación paso 1
+    if (this.currentStep === 1) {
+      if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono ||
+          !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso) {
+        alert('Por favor completa todos los campos obligatorios del paso 1');
+        return;
+      }
+    }
+
+    // Validación paso 2
+    if (this.currentStep === 2) {
+      if (!this.planSeleccionado) {
+        alert('Por favor selecciona la modalidad de servicio');
+        return;
+      }
+      if ((this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') && !this.diasSeleccionados) {
+        alert('Por favor selecciona la cantidad de días');
+        return;
+      }
+    }
+
+    if (this.currentStep < 3) this.currentStep++;
   }
 
   prevStep() {
@@ -88,14 +116,26 @@ export class SolicitudPage {
     reader.readAsDataURL(file);
   }
 
-  validarFormulario(): boolean {
-    if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono || 
-        !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso || 
-        !this.cliente.modalidad) {
-      alert('Por favor completa todos los campos obligatorios');
-      return false;
+  // Modalidad seleccionada
+  onModalidadChange() {
+    this.diasSeleccionados = null;
+    if (this.planSeleccionado === 'Online') {
+      this.precio = 3500;
+    } else {
+      this.precio = 0;
     }
-    return true;
+  }
+
+  // Días seleccionados
+  onDiasChange() {
+    if (this.planSeleccionado === 'Presencial' || this.planSeleccionado === 'Hibrido') {
+      switch (Number(this.diasSeleccionados)) {
+        case 3: this.precio = 3000; break;
+        case 4: this.precio = 3500; break;
+        case 5: this.precio = 4000; break;
+        default: this.precio = 0; break;
+      }
+    }
   }
 
   resetFormData() {
@@ -108,46 +148,61 @@ export class SolicitudPage {
     };
     this.previews = { frente: '', espalda: '', izquierda: '', derecha: '' };
     this.currentStep = 1;
+    this.planSeleccionado = '';
+    this.diasSeleccionados = null;
+    this.precio = 0;
   }
 
-onSubmit() {
-  if (!this.validarFormulario()) return;
-
-  this.isLoading = true;
-
-  // Crear FormData
-  const formData = new FormData();
-  formData.append('nombre', this.cliente.nombre);
-  formData.append('correo', this.cliente.correo);
-  formData.append('telefono', this.cliente.telefono);
-  formData.append('fecha_nacimiento', this.cliente.fechaNacimiento);
-  formData.append('altura', String(this.cliente.altura));
-  formData.append('altura_unidad', this.cliente.alturaUnidad);
-  formData.append('peso', String(this.cliente.peso));
-  formData.append('peso_unidad', this.cliente.pesoUnidad);
-  formData.append('enfermedades', this.cliente.enfermedades);
-  formData.append('incapacidades', this.cliente.incapacidades);
-  formData.append('modalidad', this.cliente.modalidad);
-
-  // Archivos reales
-  if (this.frenteInput.nativeElement.files[0]) formData.append('foto_frente', this.frenteInput.nativeElement.files[0]);
-  if (this.espaldaInput.nativeElement.files[0]) formData.append('foto_espalda', this.espaldaInput.nativeElement.files[0]);
-  if (this.izquierdaInput.nativeElement.files[0]) formData.append('foto_izquierda', this.izquierdaInput.nativeElement.files[0]);
-  if (this.derechaInput.nativeElement.files[0]) formData.append('foto_derecha', this.derechaInput.nativeElement.files[0]);
-
-  // Enviar al backend
-  this.api.registrarClienteFormData(formData).subscribe({
-    next: res => {
-      this.isLoading = false;
-      alert('Cliente registrado correctamente');
-      this.resetFormData();
-    },
-    error: err => {
-      this.isLoading = false;
-      console.error('Error al registrar cliente:', err);
-      alert('Error al registrar cliente');
+  onSubmit() {
+    if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono ||
+        !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso) {
+      alert('Por favor completa todos los campos obligatorios del paso 1');
+      return;
     }
-  });
+    if (!this.planSeleccionado) {
+      alert('Por favor selecciona la modalidad de servicio');
+      return;
+    }
+    if ((this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') && !this.diasSeleccionados) {
+      alert('Por favor selecciona la cantidad de días');
+      return;
+    }
+
+    this.isLoading = true;
+
+    const formData = new FormData();
+    formData.append('nombre', this.cliente.nombre);
+    formData.append('correo', this.cliente.correo);
+    formData.append('telefono', this.cliente.telefono);
+    formData.append('fecha_nacimiento', this.cliente.fechaNacimiento);
+    formData.append('altura', String(this.cliente.altura));
+    formData.append('altura_unidad', this.cliente.alturaUnidad);
+    formData.append('peso', String(this.cliente.peso));
+    formData.append('peso_unidad', this.cliente.pesoUnidad);
+    formData.append('enfermedades', this.cliente.enfermedades);
+    formData.append('incapacidades', this.cliente.incapacidades);
+    formData.append('modalidad', this.planSeleccionado);
+    formData.append('estado', this.cliente.estado);              // Estado
+    formData.append('dias', this.diasSeleccionados?.toString() || ''); // Días seleccionados
+    formData.append('precio', this.precio.toString());          // Precio calculado
+
+
+    if (this.frenteInput.nativeElement.files[0]) formData.append('foto_frente', this.frenteInput.nativeElement.files[0]);
+    if (this.espaldaInput.nativeElement.files[0]) formData.append('foto_espalda', this.espaldaInput.nativeElement.files[0]);
+    if (this.izquierdaInput.nativeElement.files[0]) formData.append('foto_izquierda', this.izquierdaInput.nativeElement.files[0]);
+    if (this.derechaInput.nativeElement.files[0]) formData.append('foto_derecha', this.derechaInput.nativeElement.files[0]);
+
+    this.api.registrarClienteFormData(formData).subscribe({
+      next: res => {
+        this.isLoading = false;
+        alert('Cliente registrado correctamente');
+        this.resetFormData();
+      },
+      error: err => {
+        this.isLoading = false;
+        console.error('Error al registrar cliente:', err);
+        alert('Error al registrar cliente');
+      }
+    });
   }
 }
-

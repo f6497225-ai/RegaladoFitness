@@ -15,7 +15,30 @@
 <ion-content>
   <br>
   <div class="container" *ngIf="cliente">
+
+    <!-- ACCIONES DEL CLIENTE -->
+    <div class="acciones-panel">
+      <div class="acciones-title">⚡ Acciones</div>
+      <div class="acciones-select">
+        <label for="estado-select">Cambiar Estado:</label>
+        <select class="seet" id="estado-select" [(ngModel)]="cliente.estado" (change)="actualizarEstado(cliente.estado)">
+          <option value="aceptada">Aceptada</option>
+          <option value="rechazada">Rechazada</option>
+        </select>
+      </div>
+      <div class="estado-actual">
+        Estado actual: 
+        <span [ngClass]="{
+          'estado-pendiente': cliente.estado === 'pendiente',
+          'estado-aceptada': cliente.estado === 'aceptada',
+          'estado-rechazada': cliente.estado === 'rechazada'
+        }">{{ cliente.estado | titlecase }}</span>
+      </div>
+    </div>
+
+    <!-- PANEL DE INFORMACIÓN DEL CLIENTE -->
     <div class="panels-container">
+
       <!-- Información Personal -->
       <div class="panel">
         <div class="panel-title">👤 Información Personal</div>
@@ -27,22 +50,18 @@
           <div class="info-label">Edad</div>
           <div class="info-value">{{ calcularEdad(cliente.fecha_nacimiento) }} años</div>
         </div>
-<div class="info-item">
-  <div class="info-label">Correo Electrónico</div>
-  <div class="info-value">
-    <a [href]="'mailto:' + cliente.correo">
-      {{ cliente.correo }}
-    </a>
-  </div>
-</div>
-<div class="info-item">
-  <div class="info-label">Teléfono</div>
-  <div class="info-value">
-    <a [href]="'https://wa.me/' + cliente.telefono" target="_blank">
-      {{ cliente.telefono }}
-    </a>
-  </div>
-</div>
+        <div class="info-item">
+          <div class="info-label">Correo Electrónico</div>
+          <div class="info-value">
+            <a [href]="'mailto:' + cliente.correo">{{ cliente.correo }}</a>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Teléfono</div>
+          <div class="info-value">
+            <a [href]="'https://wa.me/' + cliente.telefono" target="_blank">{{ cliente.telefono }}</a>
+          </div>
+        </div>
       </div>
 
       <!-- Información Médica -->
@@ -55,6 +74,23 @@
         <div class="info-item">
           <div class="info-label">Incapacidad</div>
           <div class="info-value">{{ cliente.incapacidades || 'Ninguna' }}</div>
+        </div>
+      </div>
+            <div class="panel">
+        <div class="panel-title">📋 Información del Servicio</div>
+        <div class="info-item">
+          <div class="info-label">Cantidad de Días </div>
+          <div class="info-value">
+  {{ cliente.dias ? (cliente.dias + ' Días') : 'Online' }}
+</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Monto</div>
+          <div class="info-value">RD$ {{ cliente.precio || 'Ninguna' }}</div>
+        </div>
+          <div class="info-item">
+          <div class="info-label">Modalidad de Servicio</div>
+          <div class="info-value">{{ cliente.modalidad || 'Ninguna' }}</div>
         </div>
       </div>
 
@@ -76,12 +112,12 @@
           </span>
         </div>
         <div class="measurement-item" *ngIf="cliente.peso && cliente.altura">
-  <span>Nivel de peso</span>
-  <span class="measurement-value" 
-        [style.color]="getNivelPeso(cliente.peso, cliente.altura, cliente.altura_unidad, cliente.peso_unidad).color">
-    {{ getNivelPeso(cliente.peso, cliente.altura, cliente.altura_unidad, cliente.peso_unidad).texto }}
-  </span>
-</div>
+          <span>Nivel de peso</span>
+          <span class="measurement-value" 
+                [style.color]="getNivelPeso(cliente.peso, cliente.altura, cliente.altura_unidad, cliente.peso_unidad).color">
+            {{ getNivelPeso(cliente.peso, cliente.altura, cliente.altura_unidad, cliente.peso_unidad).texto }}
+          </span>
+        </div>
       </div>
     </div>
 
@@ -89,25 +125,18 @@
     <div class="photos-panel">
       <div class="photos-title">📸 Fotos del Cliente</div>
       <div class="photos-grid">
-        <!-- Frente -->
         <div class="photo-card" *ngIf="cliente.foto_frente" (click)="abrirZoom(cliente.foto_frente)">
           <img [src]="cliente.foto_frente" alt="Foto Frente">
           <div class="photo-label">Frente</div>
         </div>
-
-        <!-- Izquierda -->
         <div class="photo-card" *ngIf="cliente.foto_izquierda" (click)="abrirZoom(cliente.foto_izquierda)">
           <img [src]="cliente.foto_izquierda" alt="Foto Izquierda">
           <div class="photo-label">Izquierda</div>
         </div>
-
-        <!-- Espalda -->
         <div class="photo-card" *ngIf="cliente.foto_espalda" (click)="abrirZoom(cliente.foto_espalda)">
           <img [src]="cliente.foto_espalda" alt="Foto Espalda">
           <div class="photo-label">Espalda</div>
         </div>
-
-        <!-- Derecha -->
         <div class="photo-card" *ngIf="cliente.foto_derecha" (click)="abrirZoom(cliente.foto_derecha)">
           <img [src]="cliente.foto_derecha" alt="Foto Derecha">
           <div class="photo-label">Derecha</div>
@@ -115,7 +144,6 @@
       </div>
     </div>
 
-    <!-- Overlay para Zoom -->
     <div class="zoom-overlay" *ngIf="imagenZoom" (click)="cerrarZoom()">
       <img [src]="imagenZoom" alt="Zoom cliente" class="zoomed-image">
     </div>

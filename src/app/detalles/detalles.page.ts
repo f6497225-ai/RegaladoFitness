@@ -1,6 +1,8 @@
 import { Component, Input, input } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiService } from '../../service/api';
 import { Location } from '@angular/common';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-detalles',
@@ -15,7 +17,7 @@ cliente: any; // Cliente recibido desde la página anterior
   // Para zoom
   imagenZoom: string | null = null;
 
-  constructor(private location: Location, private router: Router) {}
+  constructor(private location: Location, private router: Router, private toastController: ToastController, private apiService: ApiService,) {}
 
   ngOnInit() {
     const navigation = this.router.getCurrentNavigation();
@@ -81,4 +83,61 @@ cliente: any; // Cliente recibido desde la página anterior
   cerrarZoom() {
     this.imagenZoom = null;
   }
+
+actualizarEstado(nuevoEstado: string) {
+  if (!this.cliente?.id) return;
+
+  this.apiService.actualizarEstado(this.cliente.id, nuevoEstado).subscribe({
+    next: async () => {
+      // Actualizar solo si la DB respondió bien
+      this.cliente.estado = nuevoEstado;
+
+      const toast = await this.toastController.create({
+        message: `Estado actualizado a "${nuevoEstado}"`,
+        duration: 2000,
+        color: 'success'
+      });
+      toast.present();
+
+      if (nuevoEstado === 'aceptada') this.enviarWhatsApp(this.cliente);
+    },
+    error: async (err) => {
+      console.error(err);
+      const toast = await this.toastController.create({
+        message: 'Error al actualizar el estado',
+        duration: 2000,
+        color: 'danger'
+      });
+      toast.present();
+    }
+  });
+}
+
+
+enviarWhatsApp(cliente: any) {
+  if (!cliente.telefono) {
+    console.error('Teléfono del cliente vacío');
+    return;
+  }
+
+  const mensaje = `
+Estimado/a ${cliente.nombre},
+
+Nos complace informarte que tu solicitud en Regalado Fitness ha sido aceptada.
+
+Costo del servicio: ${cliente.monto || 'ND'}
+
+Para tu comodidad, puedes realizar el depósito utilizando los siguientes datos:
+Banco: Banco XYZ
+Tipo de cuenta: Cuenta Corriente
+Número de cuenta: 1234567890
+Titular: Regalado Fitness
+
+Agradecemos tu confianza y esperamos verte pronto.
+`;
+
+  const url = `https://wa.me/${cliente.telefono}?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, '_blank');
+}
+
 }

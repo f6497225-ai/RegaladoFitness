@@ -20,7 +20,7 @@ clientes: any[] = [];
   clientesFiltrados: any[] = [];
   filtros = { nombre: '' };
 
-  solicitudesNuevas: number = 0;
+  totalSolicitudesPendientes: number = 0;
   totalSolicitudes: number = 0;
 
   constructor(private api: ApiService, private router: Router) {}
@@ -32,7 +32,6 @@ clientes: any[] = [];
 cargarClientes() {
   this.api.obtenerClientes().subscribe({
     next: (res: any[]) => {
-      const ahora = new Date().getTime();
 
       this.clientes = res.map(c => {
         // --- IMC ---
@@ -52,22 +51,20 @@ cargarClientes() {
 
         // --- Fecha de registro ---
         const fechaRegistro = new Date(c.fecha_registro);
-        const horasDesdeRegistro = !isNaN(fechaRegistro.getTime())
-          ? (ahora - fechaRegistro.getTime()) / 1000 / 60 / 60
-          : 9999;
-        const esNueva = horasDesdeRegistro <= 2;
 
-        return { ...c, imc, edad, fechaRegistro, esNueva };
+        return { ...c, imc, edad, fechaRegistro };
       });
 
-      // Ordenar de más nueva a más vieja
+      // Ordenar de más nueva a más vieja según fecha de registro
       this.clientes.sort((a, b) => b.fechaRegistro.getTime() - a.fechaRegistro.getTime());
 
       this.clientesFiltrados = [...this.clientes];
 
       // --- Estadísticas ---
       this.totalSolicitudes = this.clientes.length;
-      this.solicitudesNuevas = this.clientes.filter(c => c.esNueva).length;
+      this.totalSolicitudesPendientes = this.clientes.filter(
+  c => c.estado?.trim().toLowerCase() === 'pendiente'
+).length;
 
       // --- Paginación ---
       this.totalPages = Math.ceil(this.clientesFiltrados.length / this.pageSize);
@@ -77,6 +74,7 @@ cargarClientes() {
     error: err => console.error('Error al cargar clientes', err)
   });
 }
+
 actualizarPaginacion() {
   const start = (this.currentPage - 1) * this.pageSize;
   const end = start + this.pageSize;
@@ -162,6 +160,25 @@ exportarExcel() {
   const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
   const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
   saveAs(data, 'clientesRGFitnes.xlsx');
+}
+
+
+// Cambiar estado de un cliente
+// Cambiar estado de un cliente
+cambiarEstado(cliente: any, nuevoEstado: string) {
+  cliente.estado = nuevoEstado;
+  // Aquí puedes agregar la lógica para actualizar en la base de datos
+  console.log(`Estado de ${cliente.nombre} actualizado a: ${nuevoEstado}`);
+}
+
+// Clase para estilizar el estado
+getEstadoClass(estado: string) {
+  switch (estado) {
+    case 'Aprobado': return 'estado-aprobado';
+    case 'Pendiente': return 'estado-pendiente';
+    case 'Rechazado': return 'estado-rechazado';
+    default: return '';
+  }
 }
 
 }

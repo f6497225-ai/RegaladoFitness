@@ -5,18 +5,14 @@ import { CanActivate, Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-
-  constructor(private router: Router) {}
+constructor(private router: Router) {}
 
   canActivate(): boolean {
     const token = localStorage.getItem('token');
-
     if (!token) {
-      // No logueado → redirigir al login
-      this.router.navigate(['/phadmin-gr']);
+      this.router.navigate(['/phadmin-gr']); // redirige al login si no hay token
       return false;
     }
-
-    return true; // Sí logueado → continuar
+    return true;
   }
 }

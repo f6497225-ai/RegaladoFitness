@@ -17,7 +17,13 @@
   <!-- CONTENEDOR PRINCIPAL -->
   <main class="admin-container">
   <section class="stats-grid">
+
     <div class="stat-card">
+      <div class="stat-icon">📝</div>
+      <div class="stat-number">{{ totalSolicitudesPendientes }}</div>
+      <div class="stat-label">Solicitudes Pendientes</div>
+    </div>
+      <div class="stat-card">
       <div class="stat-icon">👥</div>
       <div class="stat-number">{{ totalSolicitudes }}</div>
       <div class="stat-label">Total de Solicitudes</div>
@@ -50,56 +56,54 @@
   </div>
 
   <div class="table-container">
-
-  <div class="table-actions">
-    
-  </div>
-
-  <table class="clientes-table">
-    <thead>
-      <tr>
-        <th>Miembro</th>
-        <th>Edad</th>
-        <th>IMC</th>
-        <th>Peso</th>
-        <th>Altura</th>
-        <th>Modalidad</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let cliente of clientesPaginados">
-        <td>
-          <div class="member-info">
-            <div class="member-avatar">{{ getIniciales(cliente.nombre) }}</div>
-            <div class="member-details">
-              <h4>{{ cliente.nombre }}</h4>
-              <p>{{ cliente.email }}</p>
+    <table class="clientes-table">
+      <thead>
+        <tr>
+          <th>Miembro</th>
+          <th>Edad</th>
+          <th>Peso</th>
+          <th>Altura</th>
+          <th>Modalidad</th>
+          <th>Estado</th> <!-- Nueva columna -->
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cliente of clientesPaginados">
+          <td>
+            <div class="member-info">
+              <div class="member-avatar">{{ getIniciales(cliente.nombre) }}</div>
+              <div class="member-details">
+                <h4>{{ cliente.nombre }}</h4>
+                <p>{{ cliente.email }}</p>
+              </div>
             </div>
-          </div>
-        </td>
-        <td>{{ cliente.edad }} años</td>
-        <td>{{ cliente.imc }}</td>
-        <td>{{ cliente.peso }}</td>
-        <td>{{ cliente.altura }}</td>
-        <td>{{ cliente.modalidad }}</td>
-        <td>
-          <div class="action-buttons">
-            <button class="btn-action btn-view" (click)="verDetalles(cliente)">👁️</button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+          <td>{{ cliente.edad }} años</td>
+          <td>{{ cliente.peso }}</td>
+          <td>{{ cliente.altura }}</td>
+          <td>{{ cliente.modalidad }}</td>
+          <td>
+            <span class="estado-badge" [ngClass]="getEstadoClass(cliente.estado)">
+              {{ cliente.estado }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-action btn-view" (click)="verDetalles(cliente)">Ver Detalles</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-  <!-- Controles de paginación -->
-  <div class="pagination-controls" *ngIf="totalPages > 1">
-    <button (click)="paginaAnterior()" [disabled]="currentPage === 1">« Anterior</button>
-    <span>Página {{ currentPage }} de {{ totalPages }}</span>
-    <button (click)="paginaSiguiente()" [disabled]="currentPage === totalPages">Siguiente »</button>
+    <!-- Controles de paginación -->
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button (click)="paginaAnterior()" [disabled]="currentPage === 1">« Anterior</button>
+      <span>Página {{ currentPage }} de {{ totalPages }}</span>
+      <button (click)="paginaSiguiente()" [disabled]="currentPage === totalPages">Siguiente »</button>
+    </div>
   </div>
-
-</div>
 </section>
   </main>
 </ion-content> 
