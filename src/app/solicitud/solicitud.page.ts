@@ -139,7 +139,7 @@ nextStep() {
 
   // Días seleccionados
   onDiasChange() {
-    if (this.planSeleccionado === 'ppresencial' || this.planSeleccionado === 'Hibrido') {
+    if (this.planSeleccionado === 'Presencial' || this.planSeleccionado === 'Hibrido') {
       switch (Number(this.diasSeleccionados)) {
         case 3: this.precio = 3000; break;
         case 4: this.precio = 3500; break;
