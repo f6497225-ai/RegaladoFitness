@@ -33,9 +33,6 @@ export class SolicitudPage {
     enfermedades: '',
     incapacidades: '',
     modalidad: '',
-    estado: 'pendiente',
-    dias: null,
-    precio: '',
     foto_frente: '',
     foto_espalda: '',
     foto_izquierda: '',
@@ -53,6 +50,7 @@ export class SolicitudPage {
   planSeleccionado: string = '';
   diasSeleccionados: number | null = null;
   precio: number = 0;
+  isComplete!: boolean;
 
   constructor(private api: ApiService) {}
 
@@ -60,30 +58,40 @@ export class SolicitudPage {
     this.menuOpen = !this.menuOpen;
   }
 
-  nextStep() {
-    // Validación paso 1
-    if (this.currentStep === 1) {
-      if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono ||
-          !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso) {
-        alert('Por favor completa todos los campos obligatorios del paso 1');
-        return;
-      }
-    }
 
-    // Validación paso 2
-    if (this.currentStep === 2) {
-      if (!this.planSeleccionado) {
-        alert('Por favor selecciona la modalidad de servicio');
-        return;
-      }
-      if ((this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') && !this.diasSeleccionados) {
-        alert('Por favor selecciona la cantidad de días');
-        return;
-      }
+nextStep() {
+  // Validación paso 1
+  if (this.currentStep === 1) {
+    if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono ||
+        !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso) {
+      this.errorMessage = 'Por favor completa todos los campos obligatorios';
+      return;
     }
-
-    if (this.currentStep < 3) this.currentStep++;
+    this.errorMessage = '';
+    this.currentStep++;
+    return;
   }
+
+  // Validación paso 2
+  if (this.currentStep === 2) {
+    if (!this.planSeleccionado) {
+      this.errorMessage = 'Por favor selecciona la modalidad de servicio';
+      return;
+    }
+
+    if ((this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') && !this.diasSeleccionados) {
+      this.errorMessage = 'Por favor selecciona la cantidad de días';
+      return;
+    }
+
+    this.errorMessage = '';
+    this.currentStep++;
+    return;
+  }
+
+  // Puedes agregar validaciones para paso 3 aquí si quieres
+}
+
 
   prevStep() {
     if (this.currentStep > 1) this.currentStep--;
@@ -119,7 +127,7 @@ export class SolicitudPage {
   // Modalidad seleccionada
   onModalidadChange() {
     this.diasSeleccionados = null;
-    if (this.planSeleccionado === 'Online') {
+    if (this.planSeleccionado === 'online') {
       this.precio = 3500;
     } else {
       this.precio = 0;
@@ -128,7 +136,7 @@ export class SolicitudPage {
 
   // Días seleccionados
   onDiasChange() {
-    if (this.planSeleccionado === 'Presencial' || this.planSeleccionado === 'Hibrido') {
+    if (this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') {
       switch (Number(this.diasSeleccionados)) {
         case 3: this.precio = 3000; break;
         case 4: this.precio = 3500; break;
@@ -153,20 +161,31 @@ export class SolicitudPage {
     this.precio = 0;
   }
 
-  onSubmit() {
-    if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono ||
-        !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso) {
-      alert('Por favor completa todos los campos obligatorios del paso 1');
-      return;
-    }
-    if (!this.planSeleccionado) {
-      alert('Por favor selecciona la modalidad de servicio');
-      return;
-    }
-    if ((this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') && !this.diasSeleccionados) {
-      alert('Por favor selecciona la cantidad de días');
-      return;
-    }
+  errorMessage: string = '';
+
+onSubmit() {
+  if (!this.cliente.nombre || !this.cliente.correo || !this.cliente.telefono ||
+      !this.cliente.fechaNacimiento || !this.cliente.altura || !this.cliente.peso) {
+    this.errorMessage = 'Por favor completa todos los campos obligatorios del paso 1';
+    return;
+  }
+
+  if (!this.planSeleccionado) {
+    this.errorMessage = 'Por favor selecciona la modalidad de servicio';
+    return;
+  }
+
+  if ((this.planSeleccionado === 'presencial' || this.planSeleccionado === 'hibrido') && !this.diasSeleccionados) {
+    this.errorMessage = 'Por favor selecciona la cantidad de días';
+    return;
+  }
+
+  // Limpiar mensaje antes de enviar
+  this.errorMessage = '';
+
+  // Lógica de envío...
+
+
 
     this.isLoading = true;
 
@@ -182,27 +201,34 @@ export class SolicitudPage {
     formData.append('enfermedades', this.cliente.enfermedades);
     formData.append('incapacidades', this.cliente.incapacidades);
     formData.append('modalidad', this.planSeleccionado);
-    formData.append('estado', this.cliente.estado);              // Estado
-    formData.append('dias', this.diasSeleccionados?.toString() || ''); // Días seleccionados
-    formData.append('precio', this.precio.toString());          // Precio calculado
-
+    formData.append('dias', this.diasSeleccionados ? String(this.diasSeleccionados) : '');
 
     if (this.frenteInput.nativeElement.files[0]) formData.append('foto_frente', this.frenteInput.nativeElement.files[0]);
     if (this.espaldaInput.nativeElement.files[0]) formData.append('foto_espalda', this.espaldaInput.nativeElement.files[0]);
     if (this.izquierdaInput.nativeElement.files[0]) formData.append('foto_izquierda', this.izquierdaInput.nativeElement.files[0]);
     if (this.derechaInput.nativeElement.files[0]) formData.append('foto_derecha', this.derechaInput.nativeElement.files[0]);
 
-    this.api.registrarClienteFormData(formData).subscribe({
-      next: res => {
-        this.isLoading = false;
-        alert('Cliente registrado correctamente');
-        this.resetFormData();
-      },
-      error: err => {
-        this.isLoading = false;
-        console.error('Error al registrar cliente:', err);
-        alert('Error al registrar cliente');
-      }
-    });
+    
+this.isLoading = true;
+this.isComplete = false;
+
+this.api.registrarClienteFormData(formData).subscribe({
+  next: res => {
+    // Mostrar mensaje de listo
+    this.isComplete = true;
+
+    // Quitar overlay después de 2 segundos
+    setTimeout(() => {
+      this.isLoading = false;
+      this.resetFormData();
+    }, 2000);
+  },
+  error: err => {
+    this.isLoading = false;
+    this.isComplete = false;
+    console.error('Error al registrar cliente:', err);
+    // Podrías mostrar un overlay de error o mantener el alert
+    alert('Error al registrar cliente');
   }
-}
+});
+  }}
