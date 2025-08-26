@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'https://backend-debe.onrender.com'; // o la URL pública de tu backend
+  private apiUrl = 'https://backend-1-al3s.onrender.com'; // o la URL pública de tu backend
 
   constructor(private http: HttpClient) {}
 
